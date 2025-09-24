@@ -40,6 +40,35 @@ const server = new McpServer({
   version: '1.0.0',
 });
 
+interface Job {
+  title: string;
+  description: string;
+}
+
+const jobs: Job[] = [];
+
+server.tool(
+  'create-job',
+  'Create a job',
+  {
+    title: z.string(),
+    description: z.string(),
+  },
+  async ({ title, description }) => {
+    jobs.push({ title, description });
+    return { content: [{ type: 'text', text: `Job created successfully! ${JSON.stringify(jobs)}` }] };
+  },
+);
+
+server.tool(
+  'get-jobs',
+  'Get all jobs',
+  {},
+  async () => {
+    return { content: [{ type: 'text', text: `Jobs: ${JSON.stringify(jobs)}` }] };
+  },
+);
+
 server.tool(
   'send-email',
   'Send an email using Resend',

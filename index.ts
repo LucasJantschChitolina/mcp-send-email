@@ -1,8 +1,8 @@
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import minimist from 'minimist';
-import { Resend } from 'resend';
-import { z } from 'zod';
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import minimist from "minimist";
+import { Resend } from "resend";
+import { z } from "zod";
 
 // Parse command line arguments
 const argv = minimist(process.argv.slice(2));
@@ -17,17 +17,27 @@ const senderEmailAddress = argv.sender || process.env.SENDER_EMAIL_ADDRESS;
 // Get reply to email addresses from command line argument or fall back to environment variable
 let replierEmailAddresses: string[] = [];
 
-if (Array.isArray(argv['reply-to'])) {
-  replierEmailAddresses = argv['reply-to'];
-} else if (typeof argv['reply-to'] === 'string') {
-  replierEmailAddresses = [argv['reply-to']];
+if (Array.isArray(argv["reply-to"])) {
+  replierEmailAddresses = argv["reply-to"];
+} else if (typeof argv["reply-to"] === "string") {
+  replierEmailAddresses = [argv["reply-to"]];
 } else if (process.env.REPLY_TO_EMAIL_ADDRESSES) {
-  replierEmailAddresses = process.env.REPLY_TO_EMAIL_ADDRESSES.split(',');
+  replierEmailAddresses = process.env.REPLY_TO_EMAIL_ADDRESSES.split(",");
 }
+
+// Get Convex deployment URL from command line argument or fall back to environment variable
+const convexUrl = argv.convex || process.env.CONVEX_URL;
 
 if (!apiKey) {
   console.error(
-    'No API key provided. Please set RESEND_API_KEY environment variable or use --key argument',
+    "No API key provided. Please set RESEND_API_KEY environment variable or use --key argument"
+  );
+  process.exit(1);
+}
+
+if (!convexUrl) {
+  console.error(
+    "No Convex URL provided. Please set CONVEX_URL environment variable or use --convex argument"
   );
   process.exit(1);
 }
@@ -36,51 +46,109 @@ const resend = new Resend(apiKey);
 
 // Create server instance
 const server = new McpServer({
-  name: 'email-sending-service',
-  version: '1.0.0',
+  name: "email-sending-service",
+  version: "1.0.0",
 });
 
 interface Job {
+  _id: string;
   title: string;
   description: string;
 }
 
-const jobs: Job[] = [];
+async function convexRequest(
+  endpoint: string,
+  method: "GET" | "POST",
+  body?: any
+): Promise<any> {
+  if (!convexUrl) {
+    throw new Error("CONVEX_URL environment variable is required");
+  }
+
+  const url = `${convexUrl}${endpoint}`;
+  const options: RequestInit = {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  if (body && method === "POST") {
+    options.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    throw new Error(
+      `Convex API request failed: ${response.status} ${response.statusText}`
+    );
+  }
+
+  return await response.json();
+}
 
 server.tool(
-  'create-job',
-  'Create a job',
+  "create-job",
+  "Create a job",
   {
     title: z.string(),
     description: z.string(),
   },
   async ({ title, description }) => {
-    jobs.push({ title, description });
-    return { content: [{ type: 'text', text: `Job created successfully! ${JSON.stringify(jobs)}` }] };
-  },
+    try {
+      const job = await convexRequest("/jobs", "POST", { title, description });
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Job created successfully! ${JSON.stringify(job)}`,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Failed to create job: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+      };
+    }
+  }
 );
 
-server.tool(
-  'get-jobs',
-  'Get all jobs',
-  {},
-  async () => {
-    return { content: [{ type: 'text', text: `Jobs: ${JSON.stringify(jobs)}` }] };
-  },
-);
+server.tool("get-jobs", "Get all jobs", {}, async () => {
+  try {
+    const jobs = await convexRequest("/jobs", "GET");
+    return {
+      content: [{ type: "text", text: `Jobs: ${JSON.stringify(jobs)}` }],
+    };
+  } catch (error) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Failed to get jobs: ${error instanceof Error ? error.message : String(error)}`,
+        },
+      ],
+    };
+  }
+});
 
 server.tool(
-  'send-email',
-  'Send an email using Resend',
+  "send-email",
+  "Send an email using Resend",
   {
-    to: z.string().email().describe('Recipient email address'),
-    subject: z.string().describe('Email subject line'),
-    text: z.string().describe('Plain text email content'),
+    to: z.string().email().describe("Recipient email address"),
+    subject: z.string().describe("Email subject line"),
+    text: z.string().describe("Plain text email content"),
     html: z
       .string()
       .optional()
       .describe(
-        'HTML email content. When provided, the plain text argument MUST be provided as well.',
+        "HTML email content. When provided, the plain text argument MUST be provided as well."
       ),
     cc: z
       .string()
@@ -88,7 +156,7 @@ server.tool(
       .array()
       .optional()
       .describe(
-        'Optional array of CC email addresses. You MUST ask the user for this parameter. Under no circumstance provide it yourself',
+        "Optional array of CC email addresses. You MUST ask the user for this parameter. Under no circumstance provide it yourself"
       ),
     bcc: z
       .string()
@@ -96,13 +164,13 @@ server.tool(
       .array()
       .optional()
       .describe(
-        'Optional array of BCC email addresses. You MUST ask the user for this parameter. Under no circumstance provide it yourself',
+        "Optional array of BCC email addresses. You MUST ask the user for this parameter. Under no circumstance provide it yourself"
       ),
     scheduledAt: z
       .string()
       .optional()
       .describe(
-        "Optional parameter to schedule the email. This uses natural language. Examples would be 'tomorrow at 10am' or 'in 2 hours' or 'next day at 9am PST' or 'Friday at 3pm ET'.",
+        "Optional parameter to schedule the email. This uses natural language. Examples would be 'tomorrow at 10am' or 'in 2 hours' or 'next day at 9am PST' or 'Friday at 3pm ET'."
       ),
     // If sender email address is not provided, the tool requires it as an argument
     ...(!senderEmailAddress
@@ -112,7 +180,7 @@ server.tool(
             .email()
             .nonempty()
             .describe(
-              'Sender email address. You MUST ask the user for this parameter. Under no circumstance provide it yourself',
+              "Sender email address. You MUST ask the user for this parameter. Under no circumstance provide it yourself"
             ),
         }
       : {}),
@@ -124,7 +192,7 @@ server.tool(
             .array()
             .optional()
             .describe(
-              'Optional email addresses for the email readers to reply to. You MUST ask the user for this parameter. Under no circumstance provide it yourself',
+              "Optional email addresses for the email readers to reply to. You MUST ask the user for this parameter. Under no circumstance provide it yourself"
             ),
         }
       : {}),
@@ -135,16 +203,16 @@ server.tool(
 
     // Type check on from, since "from" is optionally included in the arguments schema
     // This should never happen.
-    if (typeof fromEmailAddress !== 'string') {
-      throw new Error('from argument must be provided.');
+    if (typeof fromEmailAddress !== "string") {
+      throw new Error("from argument must be provided.");
     }
 
     // Similar type check for "reply-to" email addresses.
     if (
-      typeof replyToEmailAddresses !== 'string' &&
+      typeof replyToEmailAddresses !== "string" &&
       !Array.isArray(replyToEmailAddresses)
     ) {
-      throw new Error('replyTo argument must be provided.');
+      throw new Error("replyTo argument must be provided.");
     }
 
     console.error(`Debug - Sending email with from: ${fromEmailAddress}`);
@@ -191,28 +259,28 @@ server.tool(
 
     if (response.error) {
       throw new Error(
-        `Email failed to send: ${JSON.stringify(response.error)}`,
+        `Email failed to send: ${JSON.stringify(response.error)}`
       );
     }
 
     return {
       content: [
         {
-          type: 'text',
+          type: "text",
           text: `Email sent successfully! ${JSON.stringify(response.data)}`,
         },
       ],
     };
-  },
+  }
 );
 
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error('Email sending service MCP Server running on stdio');
+  console.error("Email sending service MCP Server running on stdio");
 }
 
 main().catch((error) => {
-  console.error('Fatal error in main():', error);
+  console.error("Fatal error in main():", error);
   process.exit(1);
 });

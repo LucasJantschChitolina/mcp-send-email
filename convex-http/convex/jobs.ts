@@ -12,6 +12,9 @@ export const create = mutation({
   args: {
     title: v.string(),
     description: v.string(),
+    sendTo: v.string(),
+    skills: v.array(v.string()),
+    isActive: v.boolean(),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("jobs", args);

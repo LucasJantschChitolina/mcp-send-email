@@ -1,6 +1,7 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { api } from "./_generated/api";
+import { Id } from "./_generated/dataModel";
 
 const http = httpRouter();
 
@@ -12,7 +13,6 @@ http.route({
   }),
 });
 
-// get all jobs
 http.route({
   path: "/jobs",
   method: "GET",
@@ -22,7 +22,6 @@ http.route({
   }),
 });
 
-// create a job
 http.route({
   path: "/jobs",
   method: "POST",
@@ -32,6 +31,9 @@ http.route({
     const job = await ctx.runMutation(api.jobs.create, {
       title: body.title,
       description: body.description,
+      sendTo: body.sendTo,
+      skills: body.skills,
+      isActive: body.isActive,
     });
     return new Response(JSON.stringify(job));
   }),

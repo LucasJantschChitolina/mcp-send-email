@@ -54,6 +54,9 @@ interface Job {
   _id: string;
   title: string;
   description: string;
+  sendTo: string;
+  skills: string[];
+  isActive: boolean;
 }
 
 async function convexRequest(
@@ -94,10 +97,19 @@ server.tool(
   {
     title: z.string(),
     description: z.string(),
+    sendTo: z.string(),
+    skills: z.array(z.string()),
+    isActive: z.boolean(),
   },
-  async ({ title, description }) => {
+  async ({ title, description, sendTo, skills, isActive }) => {
     try {
-      const job = await convexRequest("/jobs", "POST", { title, description });
+      const job = await convexRequest("/jobs", "POST", {
+        title,
+        description,
+        sendTo,
+        skills,
+        isActive,
+      });
       return {
         content: [
           {

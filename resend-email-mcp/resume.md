@@ -1,71 +1,67 @@
-name: Lucas Chitolina
-github: https://github.com/LucasJantschChitolina
-linkedin: https://www.linkedin.com/in/lucaschitolina/
-twitter (x): https://x.com/lucaschitolina_
-email: lucas.chitolina01@gmail.com
-location: Santa Catarina, Brazil
+# Lucas Jantsch Chitolina
 
-summary: Software Engineer with 5 years of professional experience developing web systems, working as Frontend Developer and Full Stack Developer. Focused on developing and maintaining interfaces with thousands of monthly users, making them responsive and scalable using React.js, React Native, Next.js, and cloud technologies.
+**Phone:** +55 49 98426-3787 | **Email:** lucas.chitolina01@gmail.com  
+**Location:** Chapecó, SC, Brazil  
+**LinkedIn:** [linkedin.com/in/lucaschitolina](#) | **GitHub:** [github.com/lucaschitolina](#) | **X (Twitter):** [x.com/lucaschitolina\_](https://x.com/lucaschitolina_)  
+**Dev.to:** [dev.to/lucaschitolina](https://dev.to/lucaschitolina) | **Substack:** [substack.com/@lucaschitolina](https://substack.com/@lucaschitolina)
 
-education:
+---
 
-- Bachelor's Degree, Computer Science - University of Western Santa Catarina (January 2023 - January 2027)
-- Technical High School, Computer Science - Federal Institute of Santa Catarina (2017 - 2021)
+## PROFESSIONAL SUMMARY
 
-experience:
+Software Engineer with 8 years of coding experience (since 2017) and 5 years of professional experience in web development, specializing in both Frontend and Backend.
 
-- Software Engineer at GrowinCo. (August 2024 - Present)
-  - Maintained a platform with the largest players in the CPG industry
-  - Created a tool for identifying and removing duplicate entities in the database
-  - Full development of projects from start to finish
-  - Created a client prospecting module using Next.js with email integration
-  - Actively identified product needs
-  - Applied product engineering methodologies from metrics of the platform
+Expertise in React.js, Next.js, Node.js, Vite, TypeScript, MongoDB, and PostgreSQL, with hands-on experience in AWS (S3, RDS, EC2), Docker, CI/CD, and Agile methodologies.
 
-- Full Stack Developer at IXC Soft - Management System for Providers (December 2022 - August 2024)
-  - Fixed critical bugs in a platform with hundreds of daily users
-  - Created a dashboard using React to manage internal applications
-  - Led the migration of the legacy frontend to a new version in Next.js, reducing the average delivery time for new features from weeks to 5 days
-  - Developed a design system from scratch for the new frontend with TailwindCSS and Radix UI
-  - Planned the architecture of the new frontend, persuaded stakeholders, and guided the team in using the new technologies
-  - Implemented a translation system that supported three languages using i18n in React
-  - Continuous interaction with the support team to understand customer demands
+Always learning, solving problems, and improving technical and communication skills to work on complex systems.
 
-- Full Stack Developer at M8 Sistemas (June 2022 - December 2022)
-  - Developed an application for salespeople to make offline sales
-  - Restructured the legacy frontend to a modern architecture in React.js
-  - Integrated WhatsApp into the application through a .NET API
+---
 
-- Fullstack Developer at Ilha de Obras (May 2020 - June 2022)
-  - Full-stack development responsibilities
+## EXPERIENCE
 
-skills:
+### Software Engineer | GrowinCo.
 
-- JavaScript
-- TypeScript
-- React.js
-- React Native
-- Next.js
-- Node.js
-- Tailwind CSS
-- HTML
-- SCSS
-- MySQL
-- PostgreSQL
-- MongoDB
-- SQLite
-- Amazon S3
-- Amazon RDS
-- Amazon EC2
-- CI/CD
-- DevOps
-- Docker
-- Git
-- GitLab
-- GitHub
+**Aug 2024 – Present**
 
-languages:
+- Developing features for international customers, ensuring high-quality solutions tailored to global business needs, serving 9 of the 15 largest CPG companies in the world.
+- Designing and building complex modules from scratch, handling architecture, development, and deployment of 2 projects per month.
+- Thrived in a fully remote environment, effectively collaborating with 10 distributed teammates.
+- Contributing to product scalability and performance, leveraging best practices in modern web development.
 
-- Portuguese (Native or Bilingual)
-- English (Professional Working)
-- Spanish (Limited Working)
+### Full Stack Developer | IXC Soft
+
+**Dec 2022 – Aug 2024**
+
+- Led migrating a legacy JavaScript application to Next.js, reducing the average feature delivery time from 16 to 5 days.
+- Developed critical modules and systems for applications serving thousands of daily users, ensuring performance, scalability, and maintainability.
+- Collaborated with cross-functional teams, leading initiatives that reduced bug reports by 25%.
+- Optimized frontend and backend processes, resulting in a 60% decrease in deployment failures.
+
+### Fullstack Developer | Ilha de Obras
+
+**May 2020 – Jun 2022**
+
+- Managed a team of 5 developers, ensuring efficient collaboration, code quality, and project delivery.
+- Designed and developed solutions from scratch by engaging with stakeholders and customers, leading to 3 projects per month delivery and upgraded client satisfaction.
+- Led projects from ideation to deployment, implementing scalable architectures that reduced system downtime by 90% and improved performance by 60%.
+
+---
+
+## EDUCATION
+
+### Bachelor's in Computer Science
+
+**Jan 2023 – Jan 2027**  
+Universidade do Oeste de Santa Catarina
+
+### Technical High School in IT
+
+**2017 – 2021**  
+Instituto Federal de Santa Catarina  
+_Started programming journey in 2017_
+
+---
+
+## SKILLS
+
+React.js, Next.js, Vite, Tailwind CSS, HTML, CSS, SCSS, Animations, CSS Transitions, Interactive UI Elements, Node.js, TypeScript, Express.js, RESTful APIs, PostgreSQL, MongoDB, MySQL, SQLite, AWS (S3, RDS, EC2), Docker, CI/CD, Git, GitHub, GitLab, Full-Stack Development, API Design, Data Layer Management, Web Accessibility (WCAG).
